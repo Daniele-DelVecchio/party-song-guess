@@ -1,0 +1,9 @@
+{
+    "name": "party-song-guess-monorepo",
+    "version": "1.0.0",
+    "scripts": {
+        "server": "cd app/server && npm run dev",
+        "client": "cd app/client && npm run dev",
+        "install:all": "cd app/server && npm install && cd ../client && npm install"
+    }
+}
