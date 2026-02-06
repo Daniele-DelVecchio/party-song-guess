@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react'; // <--- 1. Importa useState
 import { t } from '../i18n';
 
 export default function Lobby({
@@ -12,22 +12,34 @@ export default function Lobby({
     toggleGenre,
     selectedDecade,
     setSelectedDecade,
-    selectedLanguage, // <--- CORRETTO: Ho tolto il commento qui
+    selectedLanguage,
     setSelectedLanguage,
     selectedDifficulty,
     setSelectedDifficulty
 }) {
-    // Funzione helper per lanciare il gioco passando tutti i parametri
-    const handleStartGame = () => {
-        // Se la funzione startGame del padre si aspetta i dati, glieli passiamo.
-        // Se il padre ha già lo stato, questo oggetto verrà ignorato o unito (male non fa).
-        startGame({
-            rounds: totalRounds,
-            genres: selectedGenres,
-            decade: selectedDecade,
-            language: selectedLanguage,
-            difficulty: selectedDifficulty
-        });
+    // 2. Stato per gestire il caricamento
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleStartGame = async () => {
+        // Attiviamo lo spinner
+        setIsLoading(true);
+        
+        try {
+            // Passiamo i dati al padre.
+            // Nota: Se startGame restituisce una Promise, l'await aspetterà.
+            // Se non restituisce una Promise, lo spinner girerà finché il componente non viene smontato (inizio gioco).
+            await startGame({
+                rounds: totalRounds,
+                genres: selectedGenres,
+                decade: selectedDecade,
+                language: selectedLanguage,
+                difficulty: selectedDifficulty
+            });
+        } catch (error) {
+            // Se c'è un errore immediato, fermiamo lo spinner (opzionale, dipende da come gestisci gli errori nel padre)
+            console.error("Errore avvio:", error);
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -60,6 +72,7 @@ export default function Lobby({
                             className="w-full p-2 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:border-purple-500 text-sm"
                             value={totalRounds}
                             onChange={e => setTotalRounds(parseInt(e.target.value, 10))}
+                            disabled={isLoading} // Disabilita input durante il caricamento
                         >
                             <option value={5}>5</option>
                             <option value={10}>10</option>
@@ -78,12 +91,13 @@ export default function Lobby({
                                 <button
                                     key={g}
                                     type="button"
+                                    disabled={isLoading}
                                     onClick={() => toggleGenre(g)}
                                     className={`px-3 py-1 rounded-full text-xs sm:text-sm border transition ${
                                         selectedGenres.includes(g)
                                             ? 'bg-purple-600 border-purple-400 text-white'
                                             : 'bg-gray-700 border-gray-600 text-gray-200'
-                                    }`}
+                                    } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                                 >
                                     {t(`landing.genre_${g}`)}
                                 </button>
@@ -100,6 +114,7 @@ export default function Lobby({
                             className="w-full p-2 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:border-purple-500 text-sm"
                             value={selectedDecade}
                             onChange={e => setSelectedDecade(e.target.value)}
+                            disabled={isLoading}
                         >
                             <option value="">{t('landing.anyDecade')}</option>
                             <option value="50s">{t('landing.decade_50s')}</option>
@@ -113,7 +128,7 @@ export default function Lobby({
                         </select>
                     </div>
 
-                    {/* SELEZIONE LINGUA (Il pezzo che dava errore) */}
+                    {/* SELEZIONE LINGUA */}
                     <div>
                         <label className="block text-xs sm:text-sm text-gray-400 mb-1">
                             {t('landing.languageLabel')}
@@ -122,6 +137,7 @@ export default function Lobby({
                             className="w-full p-2 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:border-purple-500 text-sm"
                             value={selectedLanguage} 
                             onChange={e => setSelectedLanguage(e.target.value)}
+                            disabled={isLoading}
                         >
                             <option value="">{t('landing.language_any')}</option>
                             <option value="it">{t('landing.language_it')}</option>
@@ -139,6 +155,7 @@ export default function Lobby({
                             className="w-full p-2 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:border-purple-500 text-sm"
                             value={selectedDifficulty}
                             onChange={e => setSelectedDifficulty(e.target.value)}
+                            disabled={isLoading}
                         >
                             <option value="easy">{t('landing.difficulty_easy')}</option>
                             <option value="hard">{t('landing.difficulty_hard')}</option>
@@ -150,9 +167,25 @@ export default function Lobby({
             {isOwner ? (
                 <button
                     onClick={handleStartGame} 
-                    className="w-full bg-green-600 hover:bg-green-700 py-3 rounded-lg font-bold text-lg shadow-lg transform hover:scale-105 transition"
+                    disabled={isLoading} // Disabilita il click se sta caricando
+                    className={`w-full py-3 rounded-lg font-bold text-lg shadow-lg transform transition flex items-center justify-center 
+                        ${isLoading 
+                            ? 'bg-gray-600 cursor-not-allowed opacity-75' 
+                            : 'bg-green-600 hover:bg-green-700 hover:scale-105'
+                        }`}
                 >
-                    {t('lobby.startGame')}
+                    {isLoading ? (
+                        <>
+                            {/* SVG Spinner di Tailwind */}
+                            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            {t('Caricamento in corso', 'Generating...')} {/* Assicurati di avere questa chiave o usa una stringa fissa */}
+                        </>
+                    ) : (
+                        t('lobby.startGame')
+                    )}
                 </button>
             ) : (
                 <p className="animate-pulse text-gray-400">{t('lobby.hostStarting')}</p>
