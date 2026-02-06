@@ -11,7 +11,11 @@ export default function Lobby({
     selectedGenres,
     toggleGenre,
     selectedDecade,
-    setSelectedDecade
+    setSelectedDecade,
+    selectedLanguage,
+    setSelectedLanguage,
+    selectedDifficulty,
+    setSelectedDifficulty
 }) {
     return (
         <div className="bg-gray-800 p-6 sm:p-8 rounded-xl shadow-2xl w-full max-w-lg text-center">
@@ -89,6 +93,36 @@ export default function Lobby({
                             <option value="2000s">{t('landing.decade_2000s')}</option>
                             <option value="2010s">{t('landing.decade_2010s')}</option>
                             <option value="2020s">{t('landing.decade_2020s')}</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label className="block text-xs sm:text-sm text-gray-400 mb-1">
+                            {t('landing.languageLabel')}
+                        </label>
+                        <select
+                            className="w-full p-2 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:border-purple-500 text-sm"
+                            value={selectedLanguage}
+                            onChange={e => setSelectedLanguage(e.target.value)}
+                        >
+                            <option value="">{t('landing.language_any')}</option>
+                            <option value="it">{t('landing.language_it')}</option>
+                            <option value="en">{t('landing.language_en')}</option>
+                            <option value="es">{t('landing.language_es')}</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label className="block text-xs sm:text-sm text-gray-400 mb-1">
+                            {t('landing.difficultyLabel')}
+                        </label>
+                        <select
+                            className="w-full p-2 rounded bg-gray-700 border border-gray-600 focus:outline-none focus:border-purple-500 text-sm"
+                            value={selectedDifficulty}
+                            onChange={e => setSelectedDifficulty(e.target.value)}
+                        >
+                            <option value="easy">{t('landing.difficulty_easy')}</option>
+                            <option value="hard">{t('landing.difficulty_hard')}</option>
                         </select>
                     </div>
                 </div>

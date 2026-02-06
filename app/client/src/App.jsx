@@ -15,6 +15,8 @@ function App() {
   const [errorMessage, setErrorMessage] = useState('');
   const [selectedGenres, setSelectedGenres] = useState(['pop']);
   const [selectedDecade, setSelectedDecade] = useState('');
+  const [selectedLanguage, setSelectedLanguage] = useState('');
+  const [selectedDifficulty, setSelectedDifficulty] = useState('easy');
 
   useEffect(() => {
     socket.on('room_created', (roomData) => {
@@ -94,7 +96,9 @@ function App() {
         roomId: room.id,
         genres: selectedGenres,
         decade: selectedDecade || null,
-        rounds: totalRounds
+        rounds: totalRounds,
+        language: selectedLanguage || null,
+        difficulty: selectedDifficulty || 'easy'
       });
     }
   };
@@ -169,6 +173,10 @@ function App() {
           toggleGenre={toggleGenre}
           selectedDecade={selectedDecade}
           setSelectedDecade={setSelectedDecade}
+          selectedLanguage={selectedLanguage}
+          setSelectedLanguage={setSelectedLanguage}
+          selectedDifficulty={selectedDifficulty}
+          setSelectedDifficulty={setSelectedDifficulty}
         />
       )}
 
