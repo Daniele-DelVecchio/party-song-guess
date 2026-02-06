@@ -14,7 +14,7 @@ export default function GameRoom({ socket, room, players }) {
     useEffect(() => {
         socket.on('start_countdown', ({ duration }) => {
             setStatus(t('game.getReady')); // Or specific status
-            setCountdown(duration);
+            setCountdown(duration);//test
             let count = duration;
             const timer = setInterval(() => {
                 count--;
