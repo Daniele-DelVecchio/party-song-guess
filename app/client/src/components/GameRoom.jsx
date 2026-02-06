@@ -50,7 +50,7 @@ export default function GameRoom({ socket, room, players }) {
         socket.on('round_timeout', ({ song }) => {
             setStatus('ROUND_OVER');
             setRoundResult({ winner: null, song }); // No winner
-            audioRef.current.pause();
+            audioRef.current.pause();//test
         });
 
         socket.on('wrong_guess', () => {
