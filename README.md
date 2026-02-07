@@ -1,5 +1,9 @@
 # Party Song Guess
 
+[![Node.js CI](https://github.com/YOUR_USERNAME/party-song-guess/actions/workflows/node.js.yml/badge.svg)](https://github.com/YOUR_USERNAME/party-song-guess/actions/workflows/node.js.yml)
+[![Tests](https://img.shields.io/badge/tests-107%20passing-brightgreen)](https://github.com/YOUR_USERNAME/party-song-guess/actions)
+[![Coverage](https://img.shields.io/badge/coverage-97.91%25-brightgreen)](https://github.com/YOUR_USERNAME/party-song-guess)
+
 Un gioco musicale multiplayer in tempo reale via browser. I giocatori devono indovinare il titolo della canzone riprodotta randomicamente.
 
 ## Struttura del Progetto
@@ -35,6 +39,29 @@ cd app/client
 npm install
 npm run dev
 ```
+
+## Testing
+
+Il server include una suite completa di test automatici con Jest.
+
+### Eseguire i test
+
+```bash
+cd app/server
+npm test                  # Esegui tutti i 107 test
+npm run test:watch        # Modalità watch (ri-esegue i test sui cambiamenti)
+npm run test:coverage     # Genera il report di copertura
+```
+
+### Test Coverage
+
+- **107 test** totali (43 checkAnswer + 19 languageDetection + 14 musicService + 11 aiService + 20 gameFlow)
+- **97.91%** di copertura sui servizi
+- **100%** di copertura sulle utility (checkAnswer, languageDetection)
+
+### CI/CD
+
+I test vengono eseguiti automaticamente su GitHub Actions ad ogni push/pull request su Node.js 20.x e 22.x.
 
 ## GOOGLE API KEY
 
