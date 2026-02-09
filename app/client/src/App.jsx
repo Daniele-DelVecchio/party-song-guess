@@ -115,6 +115,7 @@ function App() {
 
   const startGame = () => {
     if (room) {
+      setErrorMessage('');
       socket.emit('start_game', {
         roomId: room.id,
         genres: selectedGenres,
