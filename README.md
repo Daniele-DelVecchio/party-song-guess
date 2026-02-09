@@ -6,6 +6,7 @@ Un gioco musicale multiplayer in tempo reale via browser. I giocatori devono ind
 
 - `/app/client`: Frontend (React, Vite, TailwindCSS)
 - `/app/server`: Backend (Node.js, Express, Socket.io)
+- `/docker-compose`: Configurazione Docker per l'avvio containerizzato
 - `/docs`: Documentazione del progetto
 
 ## Funzionalità
@@ -16,11 +17,17 @@ Un gioco musicale multiplayer in tempo reale via browser. I giocatori devono ind
 
 ## Come avviare il progetto
 
-### Preequisiti
+[Standard](#avvio standard)
+
+[Docker](#avvio docker)
+
+### Pre-requisiti
 
 NodeJS > 20.19 or > 22.12
 
-### Server
+### Avvio Standard
+
+Start server
 
 ```bash
 cd app/server
@@ -28,13 +35,53 @@ npm install
 npm run dev
 ```
 
-### Client
+Start client
 
 ```bash
 cd app/client
 npm install
 npm run dev
 ```
+
+### Avvio Docker
+
+Si può avviare l'intero progetto anche attraverso l'utilizzo di Docker. Per prima cosa, assicurati di aver configurato il file `.env` come descritto nella sezione [Configurazione .env](#configurazione-env).
+
+```bash
+cd docker-compose
+start.sh
+```
+
+Docker avvierà automaticamente sia il frontend che il backend in container separati, mappando le seguenti porte:
+
+- Client: <http://localhost:5173>
+
+- Server: <http://localhost:3000>
+
+#### Risoluzione Errore: docker-credential-desktop
+
+Se durante l'esecuzione ottieni un errore simile a:
+
+```log
+error getting credentials - err: exec: "docker-credential-desktop": executable file not found in %PATH%
+```
+
+**Soluzione:**
+
+1. Apri il file `~/.docker/config.json` (solitamente in `C:\Users\[MioUtente]\.docker\config.json`)
+2. Cerca la riga `"credsStore": "desktop"` e rimuovila
+3. Salva il file
+4. Esegui nuovamente `start.sh`
+
+### Accesso all'Applicazione
+
+Una volta avviati server e client, puoi accedere all'applicazione:
+
+- **Frontend**: <http://localhost:5173>
+
+- **Backend API**: <http://localhost:3000>
+
+> **Nota:** Il client si connetterà automaticamente al server via Socket.io
 
 ## GOOGLE API KEY
 
@@ -86,4 +133,5 @@ Attualmente, il piano **"Free of Charge"** per i modelli Flash prevede i seguent
 - [ ] Rivedere l'elenco dei generi e inserire "tutti" come default
 - [ ] Rivedere l'opzione di gioco che sceglie le canzoni in base alla lingua del testo
 - [ ] Aggiungere pulsante Skip
-- [ ] Aggiungere un
+- [ ] Aggiungere statistiche di gioco (vincite/perdite per giocatore)
+- [ ] Aggiungere tema scuro/chiaro
