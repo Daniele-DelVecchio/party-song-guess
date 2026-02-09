@@ -156,15 +156,14 @@ io.on('connection', (socket) => {
                 io.to(roomId).emit('update_scores', room.players);
                 io.to(roomId).emit('round_winner', { player: player.name, song: room.currentSong });
 
-                // Short pause just to let the winner message appear,
-                // then immediately go to next song / end game.
+                // Pause to let players see the winner and song info
                 setTimeout(() => {
                     if (room.currentRound < room.totalRounds) {
                         startRound(roomId);
                     } else {
                         endGame(roomId);
                     }
-                }, 1000);
+                }, 5000);
             }
         } else {
             socket.emit('wrong_guess');
