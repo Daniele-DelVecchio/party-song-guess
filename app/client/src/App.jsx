@@ -56,7 +56,8 @@ function App() {
       setPlayers(updatedPlayers);
     });
 
-    socket.on('game_started', () => {
+    socket.on('game_started', ({ totalRounds }) => {
+      setRoom(prev => ({ ...prev, totalRounds }));
       setGameState('PLAYING');
     });
 
