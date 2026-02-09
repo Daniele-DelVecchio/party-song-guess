@@ -73,7 +73,7 @@ io.on('connection', (socket) => {
             // 2. Input normalization
             let activeGenres = Array.isArray(genres) && genres.length ? genres : [genre || 'pop'];
 
-            console.log(`[Room ${roomId}] Generating AI playlist: ${language}, ${decade}, ${difficulty}, ${requestedRounds} songs`);
+            console.log(`Room ${roomId} Generating AI playlist: ${language}, ${decade}, ${difficulty}, ${requestedRounds} songs`);
 
             // 3. Call Gemini (Step 1: get song titles) with 20s timeout
             const AI_TIMEOUT = 20000;
@@ -121,7 +121,7 @@ io.on('connection', (socket) => {
             room.currentRound = 0;
             room.state = 'PLAYING';
 
-            console.log(`[Room ${roomId}] Game started with ${room.totalRounds} songs.`);
+            console.log(`Room ${roomId} Game started with ${room.totalRounds} songs.`);
 
             // 7. Start Game
             io.to(roomId).emit('game_started', { totalRounds: room.totalRounds });
@@ -130,7 +130,7 @@ io.on('connection', (socket) => {
             setTimeout(() => startRound(roomId), 1000);
 
         } catch (e) {
-            console.error(`[Room ${roomId}] Start game error:`, e.message);
+            console.error(`Room ${roomId} Start game error:`, e.message);
             // Reset to LOBBY so players can retry
             room.state = 'LOBBY';
             const isTimeout = e.message.startsWith('AI timeout');
