@@ -75,8 +75,8 @@ io.on('connection', (socket) => {
 
             console.log(`[Room ${roomId}] Generating AI playlist: ${language}, ${decade}, ${difficulty}, ${requestedRounds} songs`);
 
-            // 3. Call Gemini (Step 1: get song titles) with 15s timeout
-            const AI_TIMEOUT = 15000;
+            // 3. Call Gemini (Step 1: get song titles) with 20s timeout
+            const AI_TIMEOUT = 20000;
             const aiRecommendations = await Promise.race([
                 aiService.getSongListFromAI({
                     genres: activeGenres,
