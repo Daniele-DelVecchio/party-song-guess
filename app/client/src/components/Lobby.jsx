@@ -22,13 +22,9 @@ export default function Lobby({
     const isLoading = isLoadingInternal && !errorMessage;
 
     const handleStartGame = async () => {
-        // Attiviamo lo spinner
         setIsLoadingInternal(true);
-        
+
         try {
-            // Passiamo i dati al padre.
-            // Nota: Se startGame restituisce una Promise, l'await aspetterà.
-            // Se non restituisce una Promise, lo spinner girerà finché il componente non viene smontato (inizio gioco).
             await startGame({
                 rounds: totalRounds,
                 genres: selectedGenres,
@@ -37,8 +33,7 @@ export default function Lobby({
                 difficulty: selectedDifficulty
             });
         } catch (error) {
-            // Se c'è un errore immediato, fermiamo lo spinner (opzionale, dipende da come gestisci gli errori nel padre)
-            console.error("Errore avvio:", error);
+            console.error("Start game error:", error);
             setIsLoadingInternal(false);
         }
     };
